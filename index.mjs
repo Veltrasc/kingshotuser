@@ -1,6 +1,6 @@
-import crypto from 'crypto';
-import express from 'express';
-import cors from 'cors';
+const crypto = require('crypto');
+const express = require('express');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;

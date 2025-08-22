@@ -4,10 +4,7 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors({
-    origin: '*',
-}));
-
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 const SECRET_KEY = "mN4!pQs6JrYwV9";
@@ -37,19 +34,24 @@ async function verificarJogador(fid) {
 }
 
 app.post('/user', async (req, res) => {
-
     try {
-
         const { id } = req.body;
 
         if (!id || id === '') {
-            return res.json({ data: 'Verifique se o campo de id está preenchido corretamente!' }).status(400);
-        };
+            return res.status(400).json({ data: 'Verifique se o campo de id está preenchido corretamente!' });
+        }
 
         const data = await verificarJogador(id);
 
-        return res.json(data).status(200);
+        if (!data) {
+            return res.status(404).json({ data: 'Jogador não encontrado.' });
+        }
+
+        return res.status(200).json(data);
     } catch (err) {
-        return res.json({ data: 'catch' }).status(500);
+        console.error(err);
+        return res.status(500).json({ data: 'Erro interno do servidor.' });
     }
 });
+
+module.exports = app;
